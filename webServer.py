@@ -20,29 +20,33 @@ def webServer(port=13331):
     
     try:
       message = connectionSocket.recv(1024).decode()# recieve the http get
-      print("Client Mssg:\n", message)
+      #print("Client Mssg:\n", message)
       filename = message.split()[1] # pull the filename off of the http get
       print(filename, "found")
 
       # opens the client requested file.
       # Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
-      f = open(filename[1:], 'rb') #maybe 'rb'?
-      print(f.read())
+      f = open(filename[1:], 'rb')#maybe 'rb'?
+      sendPackage = f.read()
+      #print(f.read())
 
 
       # Fill in start using one send for header and contents of file as one variable
-      # connectionSocket.sendall(HeaderMssgSend + message.encode())
       outputdataHeader = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\nServer: <localhost:13331>\r\nConnection: keep-alive\r\n\r\n"
-      #connectionSocket.send(outputdataHeader)
 
-      # for i in f:
+
+      # for i in f:     dont want to send line by line
       #   connectionSocket.send(i)
 
 
-      SendPackage = f.read()
-      outputdataHeader += SendPackage
 
-      connectionSocket.send(outputdataHeader)
+      #outputdataHeader += SendPackage
+
+      connectionSocket.send(outputdataHeader + sendPackage)
+      #print(connectionSocket.send(outputdataHeader + sendPackage))
+
+
+
       connectionSocket.close()  # closing the connection socket
       print(filename, "Delivered \n\n\n")
 

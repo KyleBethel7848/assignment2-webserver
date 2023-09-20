@@ -26,19 +26,21 @@ def webServer(port=13331):
 
       # opens the client requested file.
       # Plenty of guidance online on how to open and read a file in python. How should you read it though if you plan on sending it through a socket?
-      f = open(filename[1:], 'r') #maybe 'rb'?
+      f = open(filename[1:], 'rb') #maybe 'rb'?
       print(f.read())
 
 
       # Fill in start using one send for header and contents of file as one variable
-      # HeaderMssgSend =(b'HTTP/1.0 200 OK\r\nContent-Type: '
-      #                  b'text/html; charset=UTF-8\r\n\r\n')
       # connectionSocket.sendall(HeaderMssgSend + message.encode())
-      outputdata = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n"
-      connectionSocket.send(outputdata)
+      outputdataHeader = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\nHost: \r\nConection: \r\n\r\n"
+      #connectionSocket.send(outputdataHeader)
 
-      for i in f:
-        connectionSocket.send(i)
+      # for i in f:
+      #   connectionSocket.send(i)
+      SendPackage = f.read()
+      outputdataHeader += SendPackage
+
+      connectionSocket.send(outputdataHeader)
       connectionSocket.close()  # closing the connection socket
       print(filename, "Delivered \n\n\n")
 
@@ -54,9 +56,7 @@ def webServer(port=13331):
 
     # Commenting out the below, as its technically not required and some students have moved it erroneously in the While loop. DO NOT DO THAT OR YOURE GONNA HAVE A BAD TIME.
     # serverSocket.close()
-    # sys.exit()  # Terminate the program after sending the corresponding data
-
-
+    #sys.exit()  # Terminate the program after sending the corresponding data
 
 if __name__ == "__main__":
   webServer(13331)

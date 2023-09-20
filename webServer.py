@@ -32,7 +32,8 @@ def webServer(port=13331):
 
       # Fill in start using one send for header and contents of file as one variable
       # connectionSocket.sendall(HeaderMssgSend + message.encode())
-      outputdataHeader = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\nHost: \r\nConection: \r\n\r\n"
+      outputdataHeader = b"HTTP/1.1 200 OK\r\nContent-Type: text/html; charset=UTF-8\r\n" \
+                         b"Host: localhost:13331\r\nConection: keep-alive\r\n\r\n"
       #connectionSocket.send(outputdataHeader)
 
       # for i in f:
